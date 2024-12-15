@@ -1,0 +1,60 @@
+
+
+# 1 En esta primera línea tenemos que leer el fichero data_PremiumPizza.csv de la 
+#carpeta data y guardar el resultado en un dataframe llamado df
+df <- read.csv('data/data_PremiumPizza.csv')
+
+# 2 La variable UNIDADES contiene NAs. Sustituyelos por la mediana
+df$UNIDADES[is.na(df$UNIDADES)] <- median(df$UNIDADES, na.rm=T)
+
+
+# 3 Añade al dataframe una variable llamada VENTA que se calcule como la multiplicacion
+#de UNIDADES Y PRECIO
+df$VENTA <- df$UNIDADES * df$PRECIO
+
+
+# 4 Construye un bucle que recorra el dataframe fila por fila e imprima un mensaje de aviso
+#cuando la venta de una semana supere 12 millones de euros. 
+#El mensaje debe indicar la semana en la que ha ocurrido
+for (row in seq(1, nrow(df))){
+  if (df[row, 'VENTA'] > 12000000){
+    print(paste0('La venta de la semana ', row, ' ha superado los 12 millones de euros'))
+  }
+}
+
+
+# 5 Construye un bucle que recorra el dataframe fila por fila en orden temporal y vaya
+#calculando la suma acumulada de unidades vendidas. Cuando dicha suma alcance los 10 millones de unidades
+#el bucle debe parar y se debe mostrar un mensaje que indique en que semana se ha alcanzado
+#el valor y cuantas semanas se ha tardado en hacerlo (contando desde el inicio del dataframe)
+df$FECHA_SEMANA <- as.Date(df$FECHA_SEMANA, format='%Y-%m-%d')
+df <- df[order(df$FECHA_SEMANA),]
+
+unidades_vendidas <- 0
+index <- 1
+while (unidades_vendidas < 10000000){
+  if (!is.na(df[index, "UNIDADES"])){
+    unidades_vendidas <- unidades_vendidas + df[index, "UNIDADES"]
+  }
+  index <- index + 1
+}
+print(paste0('Se ha tardado ', index-1, ' semanas en alcanzar ', unidades_vendidas, ' unidades vendidas'))
+
+# 6 Ahora tenemos que construir una funcion llamada nunique que reciba un vector
+#y devuelva el numero de elementos diferentes que contiene 
+#(pista, necesitamos las funciones unique y length)
+nunique <- function(v){
+  n_elementos <- length(unique(v))
+  return(n_elementos)
+}
+
+
+# 7 A continuación tenemos que aplicar la funcion nunique() sobre cada una de
+#las columnas del dataframe df
+#Para eso os recomiendo usar lapply()
+lapply(df, nunique)
+
+
+# 8 Guardamos el dataframe df en el archivo "dato_output.csv" (usando la coma como separador)
+write.csv(df, "data/dato_output.csv", row.names = F)
+

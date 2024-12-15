@@ -1,0 +1,57 @@
+rm(list = ls())
+
+categoria <- rep(c("Ficci?n", "No Ficci?n"),times=10)
+ventas <- c(10, 12, 9, 7, 15, 13, 14, 20, 23,  5, 9, 22, 20, 18, 12, 18, 19, 24, 10, 26)
+fecha <- as.character(rep(seq(as.Date("2024-12-01"),as.Date("2024-12-10"),by="day"),2))
+
+fecha <- as.Date(fecha, format="%Y-%m-%d")
+class(fecha)
+
+df <- data.frame(fecha=fecha, categoria=categoria, ventas=ventas)
+
+totalficcion <- sum(subset(df, df$categoria=='Ficci?n')$ventas)
+totalnoficcion <- sum(subset(df, df$categoria=='No Ficci?n')$ventas)
+
+mean(df$ventas)
+median(df$ventas)
+
+df <- df[order(df$ventas, decreasing = T),]
+
+resumen_final <- list(df, c(totalficcion,totalnoficcion), "Ana")
+
+
+
+
+
+# Soluci?n 
+# Paso 1: Crear los tres vectores
+categoria <- c(rep("Ficci?n", 10), rep("No Ficci?n", 10))
+ventas <- c(150, 200, 180, 220, 170, 190, 210, 230, 160, 180, 300, 340, 320, 310, 330, 280, 290, 360, 310, 350)
+fecha <- c("2023-10-01", "2023-10-02", "2023-10-03", "2023-10-04", "2023-10-05",
+           "2023-10-06", "2023-10-07", "2023-10-08", "2023-10-09", "2023-10-10",
+           "2023-10-01", "2023-10-02", "2023-10-03", "2023-10-04", "2023-10-05",
+           "2023-10-06", "2023-10-07", "2023-10-08", "2023-10-09", "2023-10-10")
+
+# Paso 2: Convertir el vector de fechas a tipo Date
+fecha <- as.Date(fecha)
+
+# Paso 3: Calcular la suma total de ventas por categor?a
+suma_ficcion <- sum(ventas[categoria == "Ficci?n"])
+suma_no_ficcion <- sum(ventas[categoria == "No Ficci?n"])
+
+# Paso 4: Crear un dataframe con las tres columnas
+df <- data.frame(fecha = fecha, categoria = categoria, ventas = ventas)
+
+# Paso 5: Calcular la media y la mediana de las ventas
+media_ventas <- mean(df$ventas)
+mediana_ventas <- median(df$ventas)
+
+# Paso 6: Ordenar el dataframe por la columna de ventas de manera descendente
+df_ordenado <- df[order(-df$ventas), ]
+
+# Paso 7: Crear la lista resumen_final
+resumen_final <- list(
+  dataframe_ordenado = df_ordenado,
+  suma_total_ventas_por_categoria = c(Ficci?n = suma_ficcion, No_Ficci?n = suma_no_ficcion),
+  nombre = "Tu Nombre"
+)
